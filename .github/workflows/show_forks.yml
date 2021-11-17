@@ -19,9 +19,14 @@ jobs:
               }
             }
           ' --jq '.data.repository.forkCount')"
+          echo $numForks
           echo 'NUM_FORKS='$numForks >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OWNER: ${{ github.repository_owner }}
           REPO: ${{ github.event.repository.name }}
+      - run: |
+          echo $NUM_FORKS
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
