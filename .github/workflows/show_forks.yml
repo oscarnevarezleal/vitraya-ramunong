@@ -12,21 +12,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          numForks="$(gh api graphql -F owner=$OWNER -F name=$REPO -f query='
+          forks="$(gh api graphql -F owner=$OWNER -F name=$REPO -f query='
             query($name: String!, $owner: String!) {
               repository(owner: $owner, name: $name){
                 forkCount
+                forks(first: 10, orderBy: {field: NAME, direction: DESC}) {
+                    totalCount
+                    nodes {
+                      owner {
+                        id
+                      }
+                      name
+                      nameWithOwner
+                    }
+                  }
+                }
               }
             }
-          ' --jq '.data.repository.forkCount')"
-          echo $numForks
-          echo 'NUM_FORKS='$numForks >> $GITHUB_ENV
+          ' --jq '.data.repository.forks') | jq -rc"
+          echo $forks
+          echo 'REPO_FORKS='$forks >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OWNER: ${{ github.repository_owner }}
           REPO: ${{ github.event.repository.name }}
       - run: |
-          echo $NUM_FORKS
+          echo $REPO_FORKS
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
