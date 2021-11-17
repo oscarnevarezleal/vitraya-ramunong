@@ -1,0 +1,24 @@
+name: show_forks
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  serve:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          numForks="$(gh api graphql -F owner=$OWNER -F name=$REPO -f query='
+            query($name: String!, $owner: String!) {
+              repository(owner: $owner, name: $name){
+                forkCount
+              }
+            }
+          ' --jq '.data.repository.forkCount')"
+          echo 'NUM_FORKS='$numForks >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+        
