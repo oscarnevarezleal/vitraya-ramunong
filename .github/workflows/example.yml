@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Calling docker action
-        uses: oscarnevarezleal/issue-chill@vitraya-ramunong:dev
+        uses: oscarnevarezleal/vitraya-ramunong:dev
         with:
           owner: oscarnevarezleal
           repo: vitraya-ramunong
