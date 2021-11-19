@@ -8,7 +8,14 @@ inputs:
   repo:
     description: repository name
     required: true
+  token:
+    description: Github token
+    required: true
 
 runs:
   using: docker
   image: Dockerfile
+  env:
+    OWNER: ${{ inputs.owner }}
+    REPO: ${{ inputs.repo }}
+    GITHUB_TOKEN: ${{ inputs.token }}

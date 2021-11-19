@@ -8,8 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Calling docker action
-        uses: oscarnevarezleal/vitraya-ramunong@dev
+      - uses: actions/checkout@v2
+      - name: Calling action
+        uses: ./ # Uses an action in the root directory
         with:
           owner: oscarnevarezleal
           repo: vitraya-ramunong
+          token: ${{ secrets.GITHUB_TOKEN }}

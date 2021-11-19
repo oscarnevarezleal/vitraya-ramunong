@@ -1,17 +1,51 @@
 #!/usr/bin/env sh
 
+# `$*` expands the `args` supplied in an `array` individually
+# or splits `args` in a string separated by whitespace.
+#echo "args: $*"
+#env
+#args
+
 OWNER="${OWNER:=$1}"           # If variable not set or null, set it to 1st argument.
 REPO="${REPO:=$2}"             # If variable not set or null, set it to 2nd argument
-REPO_FORKS="${REPO_FORKS:=[]}" # If variable not set or null, set it to []
+GITHUB_TOKEN="${GITHUB_TOKEN:=$3}"             # If variable not set or null, set it to 2nd argument
+
+echo "OWNER ---> ${OWNER}"
+echo "REPO ---> ${REPO}"
+
+echo "$GITHUB_TOKEN" > .githubtoken
+unset GITHUB_TOKEN
+gh auth login --with-token < .githubtoken
+rm .githubtoken
+
+forks="$(gh api graphql -F owner=$OWNER -F name=$REPO -f query='
+  query ($name: String!, $owner: String!) {
+    repository(owner: $owner, name: $name) {
+      forkCount
+      forks(first: 10, orderBy: {field: NAME, direction: DESC}) {
+        totalCount
+        nodes {
+          owner {
+            id
+            login
+            avatarUrl
+          }
+          name
+          nameWithOwner
+        }
+      }
+    }
+  }
+' --jq '.data.repository.forks.nodes')"
 
 echo "# Forks" >FORKS.md
 echo "" >> FORKS.md
 
 echo "Here's the list of forks" >>FORKS.md
 
-for row in $(echo "${REPO_FORKS}" | jq -r '.[] | @base64'); do
+for row in $(echo "${forks}" | jq -r '.[] | @base64'); do
   _jq() {
-    echo ${row} | base64 --decode | jq -r ${1}
+    echo ${row} | base64 -d | jq -r ${1}
   }
   login=$(_jq '.owner.login')
   node=$(curl -s https://api.github.com/repos/${OWNER}/${REPO}/compare/main...${login}:main |
@@ -25,4 +59,4 @@ for row in $(echo "${REPO_FORKS}" | jq -r '.[] | @base64'); do
   echo " " >>FORKS.md
 done
 
-cat FORKS.md
+echo "FORKS.md was updated"

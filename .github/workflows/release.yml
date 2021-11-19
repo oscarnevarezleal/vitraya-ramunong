@@ -1,12 +1,10 @@
 # This workflow runs manually to build a docker version of this action, upload it and tag it as `dev`
-name: buildDevAction
+name: release
 
 on:
   push:
     branches:
-      - dev
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+      - main
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -33,4 +31,4 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/vitraya-ramunong:dev
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/vitraya-ramunong:latest
