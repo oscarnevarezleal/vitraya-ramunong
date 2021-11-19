@@ -1,9 +1,6 @@
 name: show_forks
 
 on:
-  push:
-    branches:
-      - dev
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -38,7 +35,7 @@ jobs:
           REPO: ${{ github.event.repository.name }}
 
       - uses: actions/checkout@v2
-      - run: chmod +x ./scripts/gen-forks-file.sh && gen-forks-file.sh
+      - run: chmod +x ./scripts/gen-forks-file.sh && ./scripts/gen-forks-file.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OWNER: ${{ github.repository_owner }}
