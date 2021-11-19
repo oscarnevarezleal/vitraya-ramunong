@@ -1,0 +1,14 @@
+name: vitraya-ramunong
+description: Keep your forks at sight
+
+inputs:
+  owner:
+    description: repo owner
+    required: true
+  repo:
+    description: repository name
+    required: true
+
+runs:
+  using: docker
+  image: Dockerfile
