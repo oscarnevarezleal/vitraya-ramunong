@@ -53,7 +53,5 @@ jobs:
           repository: .
           status_options: '--untracked-files=no'
           file_pattern: 'FORKS.md'
-          push_options: '--force'
-          skip_dirty_check: true
           skip_fetch: true
           disable_globbing: true
