@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 
-echo "# Forks" > FORKS.md
-echo "## Here's the list of forks" >>FORKS.md
+OWNER="${OWNER:=$1}"           # If variable not set or null, set it to 1st argument.
+REPO="${REPO:=$2}"             # If variable not set or null, set it to 2nd argument
+REPO_FORKS="${REPO_FORKS:=[]}" # If variable not set or null, set it to []
+
+echo "# Forks" >FORKS.md
+echo "" >> FORKS.md
+
+echo "Here's the list of forks" >>FORKS.md
+
 for row in $(echo "${REPO_FORKS}" | jq -r '.[] | @base64'); do
   _jq() {
     echo ${row} | base64 --decode | jq -r ${1}
