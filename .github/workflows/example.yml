@@ -1,0 +1,15 @@
+name: Example
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Calling docker action
+        uses: oscarnevarezleal/issue-chill@vitraya-ramunong:dev
+        with:
+          owner: oscarnevarezleal
+          repo: vitraya-ramunong
