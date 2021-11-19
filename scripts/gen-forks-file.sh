@@ -38,8 +38,6 @@ forks="$(gh api graphql -F owner=$OWNER -F name=$REPO -f query='
   }
 ' --jq '.data.repository.forks.nodes')"
 
-echo $forks
-
 echo "# Forks" >FORKS.md
 echo "" >> FORKS.md
 
@@ -61,4 +59,4 @@ for row in $(echo "${forks}" | jq -r '.[] | @base64'); do
   echo " " >>FORKS.md
 done
 
-cat FORKS.md
+echo "FORKS.md was updated"
