@@ -21,6 +21,8 @@ jobs:
                   nodes {
                     owner {
                       id
+                      login
+                      avatarUrl
                     }
                     name
                     nameWithOwner
@@ -40,7 +42,11 @@ jobs:
               _jq() {
                echo ${row} | base64 --decode | jq -r ${1}
               }
-             echo $(_jq '.name')
+              login=$(_jq '.owner.login')
+              curl https://api.github.com/repos/${OWNER}/${REPO}/compare/main...${login}:main | \
+                jq 'with_entries(if (.key|test("(ahead|behind)")) then ( {key: .key, value: .value } ) else empty end )'
           done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
