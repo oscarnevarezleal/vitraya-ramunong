@@ -47,7 +47,7 @@ echo "Here's the list of forks" >>FORKS.md
 
 for row in $(echo "${forks}" | jq -r '.[] | @base64'); do
   _jq() {
-    echo ${row} | base64 --decode | jq -r ${1}
+    echo ${row} | base64 -d | jq -r ${1}
   }
   login=$(_jq '.owner.login')
   node=$(curl -s https://api.github.com/repos/${OWNER}/${REPO}/compare/main...${login}:main |
