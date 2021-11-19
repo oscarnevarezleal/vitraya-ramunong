@@ -13,3 +13,4 @@ jobs:
         with:
           owner: oscarnevarezleal
           repo: vitraya-ramunong
+          token: ${{ secrets.GITHUB_TOKEN }}
