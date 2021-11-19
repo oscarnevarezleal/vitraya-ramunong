@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Calling docker action
-        uses: docker://onevarez/vitraya-ramunong:dev
+        uses: ./ # Uses an action in the root directory
         with:
           owner: oscarnevarezleal
           repo: vitraya-ramunong
