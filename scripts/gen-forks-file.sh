@@ -8,6 +8,8 @@ echo "OWNER ---> ${OWNER}"
 echo "REPO ---> ${REPO}"
 echo "GITHUB_TOKEN ---> ${GITHUB_TOKEN}"
 
+gh auth login --with-token ${GITHUB_TOKEN}
+
 forks="$(gh api graphql -F owner=$OWNER -F name=$REPO -f query='
   query ($name: String!, $owner: String!) {
     repository(owner: $owner, name: $name) {

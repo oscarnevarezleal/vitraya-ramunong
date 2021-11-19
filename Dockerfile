@@ -13,7 +13,6 @@ FROM alpine:3.9.6
 RUN apk add --no-cache git libc6-compat
 RUN apk add --update bash jq git && rm -rf /var/cache/apk/*
 COPY --from=builder /usr/bin/gh /usr/bin/
-RUN gh auth login --with-token ${GITHUB_TOKEN}
 
 # Copy all the files from the host into the container
 WORKDIR /src
