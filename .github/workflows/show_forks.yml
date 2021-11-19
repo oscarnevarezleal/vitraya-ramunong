@@ -38,14 +38,23 @@ jobs:
           OWNER: ${{ github.repository_owner }}
           REPO: ${{ github.event.repository.name }}
       - run: |
+          echo "# Forks" >> FORKS.md
+          echo "## Here's the list of forks" >> FORKS.md
           for row in $(echo "${REPO_FORKS}" | jq -r '.[] | @base64'); do
               _jq() {
                echo ${row} | base64 --decode | jq -r ${1}
               }
               login=$(_jq '.owner.login')
-              curl -s https://api.github.com/repos/${OWNER}/${REPO}/compare/main...${login}:main | \
-                jq 'with_entries(if (.key|test("(ahead|behind)")) then ( {key: .key, value: .value } ) else empty end )'
+              avatarUrl=$(_jq '.owner.avatarUrl')
+
+              node=$(curl -s https://api.github.com/repos/${OWNER}/${REPO}/compare/main...${login}:main | \
+                jq 'with_entries(if (.key|test("(ahead|behind)")) then ( {key: .key, value: .value } ) else empty end )')
+
+              echo $node
+              echo "- ![$login]($avatarUrl)" >> FORKS.md
+              echo >> FORKS.md
           done
+          cat FORKS.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OWNER: ${{ github.repository_owner }}
