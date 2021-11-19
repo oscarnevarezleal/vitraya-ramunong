@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Calling docker action
+      - name: Calling action
         uses: ./ # Uses an action in the root directory
         with:
           owner: oscarnevarezleal
