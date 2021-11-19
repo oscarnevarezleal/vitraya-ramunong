@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-echo "$@"
+echo "args: $@"
 
 OWNER="${OWNER:=$1}"           # If variable not set or null, set it to 1st argument.
 REPO="${REPO:=$2}"             # If variable not set or null, set it to 2nd argument
