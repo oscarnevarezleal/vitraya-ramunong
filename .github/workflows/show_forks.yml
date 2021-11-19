@@ -28,7 +28,7 @@ jobs:
                 }
               }
             }
-          ' --jq '.data.repository.forks')"
+          ' --jq '.data.repository.forks.nodes')"
           echo $forks
           echo 'REPO_FORKS='$forks >> $GITHUB_ENV
         env:
@@ -36,6 +36,11 @@ jobs:
           OWNER: ${{ github.repository_owner }}
           REPO: ${{ github.event.repository.name }}
       - run: |
-          echo $REPO_FORKS
+          for row in $(echo "${REPO_FORKS}" | jq -r '.[] | @base64'); do
+              _jq() {
+               echo ${row} | base64 --decode | jq -r ${1}
+              }
+             echo $(_jq '.name')
+          done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
