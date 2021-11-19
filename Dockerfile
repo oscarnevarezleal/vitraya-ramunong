@@ -11,7 +11,7 @@ RUN apk add --no-cache wget rsync && \
 FROM alpine:3.9.6
 
 RUN apk add --no-cache git libc6-compat
-RUN apk add --update bash jq git && rm -rf /var/cache/apk/*
+RUN apk add --update bash jq curl && rm -rf /var/cache/apk/*
 COPY --from=builder /usr/bin/gh /usr/bin/
 
 # Copy all the files from the host into the container

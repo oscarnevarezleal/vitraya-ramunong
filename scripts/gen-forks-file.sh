@@ -12,9 +12,11 @@ GITHUB_TOKEN="${GITHUB_TOKEN:=$3}"             # If variable not set or null, se
 
 echo "OWNER ---> ${OWNER}"
 echo "REPO ---> ${REPO}"
-echo "GITHUB_TOKEN ---> ${GITHUB_TOKEN}"
 
-gh auth login --with-token ${GITHUB_TOKEN}
+echo "$GITHUB_TOKEN" > .githubtoken
+unset GITHUB_TOKEN
+gh auth login --with-token < .githubtoken
+rm .githubtoken
 
 forks="$(gh api graphql -F owner=$OWNER -F name=$REPO -f query='
   query ($name: String!, $owner: String!) {
