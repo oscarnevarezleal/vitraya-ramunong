@@ -2,9 +2,11 @@
 
 OWNER="${OWNER:=$1}"           # If variable not set or null, set it to 1st argument.
 REPO="${REPO:=$2}"             # If variable not set or null, set it to 2nd argument
+GITHUB_TOKEN="${GITHUB_TOKEN:=$3}"             # If variable not set or null, set it to 2nd argument
 
 echo "OWNER ---> ${OWNER}"
 echo "REPO ---> ${REPO}"
+echo "GITHUB_TOKEN ---> ${GITHUB_TOKEN}"
 
 forks="$(gh api graphql -F owner=$OWNER -F name=$REPO -f query='
   query ($name: String!, $owner: String!) {

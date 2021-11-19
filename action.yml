@@ -8,6 +8,9 @@ inputs:
   repo:
     description: repository name
     required: true
+  token:
+    description: Github token
+    required: true
 
 runs:
   using: docker
