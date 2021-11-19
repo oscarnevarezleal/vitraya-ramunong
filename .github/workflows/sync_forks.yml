@@ -1,0 +1,57 @@
+# This workflow regenerates FORKS.md
+name: sync_forks
+
+on:
+  push:
+    branches:
+      - dev
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  serve:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          forks="$(gh api graphql -F owner=$OWNER -F name=$REPO -f query='
+            query ($name: String!, $owner: String!) {
+              repository(owner: $owner, name: $name) {
+                forkCount
+                forks(first: 10, orderBy: {field: NAME, direction: DESC}) {
+                  totalCount
+                  nodes {
+                    owner {
+                      id
+                      login
+                      avatarUrl
+                    }
+                    name
+                    nameWithOwner
+                  }
+                }
+              }
+            }
+          ' --jq '.data.repository.forks.nodes')"
+          echo 'REPO_FORKS='$forks >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+
+      - uses: actions/checkout@v2
+      - run: chmod +x ./scripts/gen-forks-file.sh && ./scripts/gen-forks-file.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        id: auto-commit-action
+        with:
+          commit_message: 'chore(forks): regenerate forks.md'
+          commit_options: '--allow-empty'
+          repository: .
+          status_options: '--untracked-files=no'
+          file_pattern: 'FORKS.md'
+          skip_fetch: true
+          disable_globbing: true
