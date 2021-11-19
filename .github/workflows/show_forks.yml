@@ -28,7 +28,7 @@ jobs:
                 }
               }
             }
-          ' --jq '.data.repository.forks') | jq -rc"
+          ' --jq '.data.repository.forks')"
           echo $forks
           echo 'REPO_FORKS='$forks >> $GITHUB_ENV
         env:
