@@ -13,18 +13,17 @@ jobs:
     steps:
       - run: |
           forks="$(gh api graphql -F owner=$OWNER -F name=$REPO -f query='
-            query($name: String!, $owner: String!) {
-              repository(owner: $owner, name: $name){
+            query ($name: String!, $owner: String!) {
+              repository(owner: $owner, name: $name) {
                 forkCount
                 forks(first: 10, orderBy: {field: NAME, direction: DESC}) {
-                    totalCount
-                    nodes {
-                      owner {
-                        id
-                      }
-                      name
-                      nameWithOwner
+                  totalCount
+                  nodes {
+                    owner {
+                      id
                     }
+                    name
+                    nameWithOwner
                   }
                 }
               }
@@ -40,4 +39,3 @@ jobs:
           echo $REPO_FORKS
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
