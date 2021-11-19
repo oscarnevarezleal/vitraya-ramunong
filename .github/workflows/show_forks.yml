@@ -50,9 +50,14 @@ jobs:
               node=$(curl -s https://api.github.com/repos/${OWNER}/${REPO}/compare/main...${login}:main | \
                 jq 'with_entries(if (.key|test("(ahead|behind)")) then ( {key: .key, value: .value } ) else empty end )')
 
+              _jqNode() {
+               echo ${node} | jq -r ${1}
+              }
+
               echo $node
-              echo "- ![$login]($avatarUrl)" >> FORKS.md
-              echo >> FORKS.md
+              echo "- ![$login]($avatarUrl) is $(_jqNode '.ahead_by') ahead" >> FORKS.md
+              echo "and, $(_jqNode '.ahead_by') behind" >> FORKS.md
+              echo " " >> FORKS.md
           done
           cat FORKS.md
         env:
