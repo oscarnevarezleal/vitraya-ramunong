@@ -2,14 +2,36 @@
 
 OWNER="${OWNER:=$1}"           # If variable not set or null, set it to 1st argument.
 REPO="${REPO:=$2}"             # If variable not set or null, set it to 2nd argument
-REPO_FORKS="${REPO_FORKS:=[]}" # If variable not set or null, set it to []
+
+echo "OWNER ---> ${OWNER}"
+echo "REPO ---> ${REPO}"
+
+forks="$(gh api graphql -F owner=$OWNER -F name=$REPO -f query='
+  query ($name: String!, $owner: String!) {
+    repository(owner: $owner, name: $name) {
+      forkCount
+      forks(first: 10, orderBy: {field: NAME, direction: DESC}) {
+        totalCount
+        nodes {
+          owner {
+            id
+            login
+            avatarUrl
+          }
+          name
+          nameWithOwner
+        }
+      }
+    }
+  }
+' --jq '.data.repository.forks.nodes')"
 
 echo "# Forks" >FORKS.md
 echo "" >> FORKS.md
 
 echo "Here's the list of forks" >>FORKS.md
 
-for row in $(echo "${REPO_FORKS}" | jq -r '.[] | @base64'); do
+for row in $(echo "${forks}" | jq -r '.[] | @base64'); do
   _jq() {
     echo ${row} | base64 --decode | jq -r ${1}
   }
