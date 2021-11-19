@@ -15,3 +15,7 @@ inputs:
 runs:
   using: docker
   image: Dockerfile
+  env:
+    OWNER: ${{ inputs.owner }}
+    REPO: ${{ inputs.repo }}
+    GITHUB_TOKEN: ${{ inputs.token }}
