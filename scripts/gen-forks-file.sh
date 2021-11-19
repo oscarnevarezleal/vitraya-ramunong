@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 OWNER="${OWNER:=$1}"           # If variable not set or null, set it to 1st argument.
 REPO="${REPO:=$2}"             # If variable not set or null, set it to 2nd argument
