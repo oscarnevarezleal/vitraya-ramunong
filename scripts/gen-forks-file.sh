@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 
-echo "args: $@"
+# `$*` expands the `args` supplied in an `array` individually
+# or splits `args` in a string separated by whitespace.
+echo "args: $*"
 
 OWNER="${OWNER:=$1}"           # If variable not set or null, set it to 1st argument.
 REPO="${REPO:=$2}"             # If variable not set or null, set it to 2nd argument
