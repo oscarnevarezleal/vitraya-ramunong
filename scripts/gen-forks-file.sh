@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "# Forks" >>FORKS.md
+echo "# Forks" > FORKS.md
 echo "## Here's the list of forks" >>FORKS.md
 for row in $(echo "${REPO_FORKS}" | jq -r '.[] | @base64'); do
   _jq() {
