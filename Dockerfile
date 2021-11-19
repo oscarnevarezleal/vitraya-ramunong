@@ -1,6 +1,8 @@
 # Specify the version of Go to use
 FROM alpine:3.9.6
 
+RUN apk add --update bash && rm -rf /var/cache/apk/*
+
 # Copy all the files from the host into the container
 WORKDIR /src
 COPY . .
